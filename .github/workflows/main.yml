@@ -1,16 +1,8 @@
-name: "Dhondhu Maharaj"
+name: "Infra Pipeline Kuch Bhi"
 
-on:
-  push:
-    branches:
-      - 'feature/**'
-      - 'main'
-      - 'hotfix/**'
+on: 
+  workflow_dispatch:
 
 jobs:
-  terraformInit:
-    name: Terraform Initwa
-    runs-on: dhondhu-maharaj
-    steps:
-      - name: Dhondhu Maharaj Rocks!
-        run: echo "Dhondhu Maharaj"
+  terraform-job:
+    runs-on: self-hosted
