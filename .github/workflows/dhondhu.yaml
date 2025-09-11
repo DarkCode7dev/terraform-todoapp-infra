@@ -1,7 +1,9 @@
 name: "Infra Pipeline Kuch Bhi"
 
-on: workflow_dispatch
-
+on: workflow_dispatch 
+permissions:
+  id-token: write       # 👈 OIDC token issue करने के लिए ज़रूरी
+  contents: read        # 👈 Repo checkout करने के लिए
 jobs:
   terraform-job:
     runs-on: self-hosted
