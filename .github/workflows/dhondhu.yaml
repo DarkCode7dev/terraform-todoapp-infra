@@ -1,28 +1,39 @@
 name: "Infra Pipeline Kuch Bhi"
 
-on: workflow_dispatch 
+on:
+  workflow_dispatch:
+
 permissions:
-  id-token: write       # 👈 OIDC token issue करने के लिए ज़रूरी
-  contents: read        # 👈 Repo checkout करने के लिए
+  id-token: write
+  contents: read
+
 jobs:
   terraform-job:
     runs-on: self-hosted
+
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v5.0.0
-     
-      - name: Azure Login
+        uses: actions/checkout@v5
+
+      - name: Azure Login (OIDC)
         uses: Azure/login@v2.3.0
         with:
           client-id: 718e0937-6c20-494e-ac7e-a420f85bb45b
           tenant-id: 9ebcd82b-3a71-49bf-891e-86d819a0911c
           subscription-id: f0641b2c-ae07-4eb4-abb0-7be5a73752cd
+
+      - name: Set Terraform Env Vars
+        run: |
+          echo "ARM_USE_OIDC=true" >> $GITHUB_ENV
+          echo "ARM_CLIENT_ID=718e0937-6c20-494e-ac7e-a420f85bb45b" >> $GITHUB_ENV
+          echo "ARM_TENANT_ID=9ebcd82b-3a71-49bf-891e-86d819a0911c" >> $GITHUB_ENV
+          echo "ARM_SUBSCRIPTION_ID=f0641b2c-ae07-4eb4-abb0-7be5a73752cd" >> $GITHUB_ENV
+
       - name: Terraform Fmt
-        id: fmt
-        run: terraform fmt -check 
+        run: terraform fmt -check
         continue-on-error: true
         working-directory: environments/dev
+
       - name: Terraform Init
-        id: init
         run: terraform init -input=false
         working-directory: environments/dev
