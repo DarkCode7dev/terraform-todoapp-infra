@@ -51,6 +51,7 @@ module "aks" {
   dns_prefix = "aks-dev-todoapp"
   tags       = local.common_tags
 }
+
 module "pip" {
   source   = "../../modules/azurerm_public_ip"
   pip_name = "pip-dev-todoapp"
