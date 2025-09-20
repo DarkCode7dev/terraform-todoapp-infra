@@ -52,8 +52,7 @@ jobs:
         working-directory: environments/dev
 
   terraform-apply:
-    # 👉 Runs only when the branch is main
-    if: github.ref == 'refs/heads/main'
+    # if: github.ref == 'refs/heads/main'
 
     runs-on: self-hosted
     needs: terraform-init-plan
