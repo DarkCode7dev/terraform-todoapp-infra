@@ -60,4 +60,4 @@ module "pip" {
   location = "centralindia"
   sku      = "Basic"
   tags     = local.common_tags
-}
+} 
