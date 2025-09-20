@@ -51,29 +51,36 @@ jobs:
         continue-on-error: true
         working-directory: environments/dev
 
-  terraform-apply:    
+  terraform-apply:
+    # 👉 Runs only when the branch is main
+    if: github.ref == 'refs/heads/main'
+
     runs-on: self-hosted
     needs: terraform-init-plan
     environment: dev
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5.0.0
 
-      - name: Azure Login
-        uses: Azure/login@v2.3.0
+    env:
+      ARM_USE_OIDC: true
+      ARM_CLIENT_ID: 718e0937-6c20-494e-ac7e-a420f85bb45b
+      ARM_TENANT_ID: 9ebcd82b-3a71-49bf-891e-86d819a0911c
+      ARM_SUBSCRIPTION_ID: f0641b2c-ae07-4eb4-abb0-7be5a73752cd
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Azure Login (OIDC)
+        uses: azure/login@v2
         with:
-          client-id: 718e0937-6c20-494e-ac7e-a420f85bb45b
-          tenant-id: 9ebcd82b-3a71-49bf-891e-86d819a0911c
-          subscription-id: f0641b2c-ae07-4eb4-abb0-7be5a73752cd
+          client-id: ${{ env.ARM_CLIENT_ID }}
+          tenant-id: ${{ env.ARM_TENANT_ID }}
+          subscription-id: ${{ env.ARM_SUBSCRIPTION_ID }}
 
       - name: Terraform Init
-        id: init
-        run: terraform init -input=false  
+        run: terraform init -input=false
         working-directory: environments/dev
 
       - name: Terraform Apply
-        id: apply
         run: terraform apply --auto-approve
-        if: github.ref == 'refs/heads/main'
         continue-on-error: true
-        working-directory: environments/dev  
+        working-directory: environments/dev
