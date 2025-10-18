@@ -16,7 +16,7 @@ module "rg" {
 module "acr" {
   depends_on = [module.rg]
   source     = "../../modules/azurerm_container_registry"
-  acr_name   = "acrdevtodoapp01"
+  acr_name   = "acrdevtodoapp077"
   rg_name    = "rg-dev-todoapp-01"
   location   = "centralindia"
   tags       = local.common_tags
@@ -25,7 +25,7 @@ module "acr" {
 module "sql_server" {
   depends_on      = [module.rg]
   source          = "../../modules/azurerm_sql_server"
-  sql_server_name = "sql-dev-todoapp-01"
+  sql_server_name = "sql-dev-todoapp-077"
   rg_name         = "rg-dev-todoapp-01"
   location        = "centralindia"
   admin_username  = "devopsadmin"
@@ -60,4 +60,4 @@ module "pip" {
   location = "centralindia"
   sku      = "Basic"
   tags     = local.common_tags
-}
+} 
