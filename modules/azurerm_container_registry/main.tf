@@ -5,4 +5,5 @@ resource "azurerm_container_registry" "acr" {
   sku                 = "Premium"
   admin_enabled       = false
   tags                = var.tags
+  # storage
 }
